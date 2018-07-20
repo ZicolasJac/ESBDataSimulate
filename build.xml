@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties>
+<project default="ESBDataSimulate" name="ESBDataSimulate" basedir=".">
+
+	<description>MonMsData</description>
+	<property name="src" location="src" />
+	<property name="dest" location="dest" />
+	<property name="classes" location="${dest}/ESBDataSimulate/classes" />
+	
+	<path id="classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="${dest}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${classes}" />
+	</target>
+	
+	<target name="compile_source" depends="init">
+		<echo>源代码构建</echo>
+		<javac srcdir="${src}" destdir="${classes}" target="1.7" debug="on" encoding="UTF-8">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="ESBDataSimulate" depends="compile_source" description="building project">
+		<echo>building project start...</echo>
+
+		<jar destfile="lib/ESBDataSimulate.jar">
+					<fileset dir="${classes}">
+					</fileset>
+		</jar>
+	
+		<copy todir="${dest}/ESBDataSimulate/lib">
+			<fileset dir="lib" />
+		</copy>
+		
+		<copy todir="${dest}/ESBDataSimulate/conf">
+			<fileset dir="conf" />
+		</copy>
+	
+	    <copy todir="${dest}/ESBDataSimulate/log">
+			<fileset dir="log" />
+		</copy>
+		
+		<copy todir="${dest}/ESBDataSimulate">
+			<fileset dir="./">
+				<include name="start.sh" />
+			</fileset>
+		</copy>
+
+	    <delete dir="${classes}" />
+		
+		<zip destfile="${dest}/ESBDataSimulate.zip">
+			<fileset dir="${dest}" />
+		</zip>
+
+		<delete dir="${dest}/ESBDataSimulate" />
+	</target>
+</project>
